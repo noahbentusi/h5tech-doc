@@ -258,7 +258,7 @@ entry.js文件
     //对.ts使用typescript加载器
     { test: /\.ts$/, loader: "ts-loader" }
 
-在项目根目录`webpack.config.js`添加一个`tsconfig.json`配置文件用来配置typescript编译选项。
+在项目根目录`webpack.config.js`文件旁边添加一个`tsconfig.json`配置文件用来配置typescript编译选项。
 
     {
         "compilerOptions": {
