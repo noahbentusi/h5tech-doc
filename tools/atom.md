@@ -26,7 +26,7 @@ atom对typescript的语言支持。安装后可对typescript语言 语法高亮�
 
 * minimap
 
-对当前编辑文件进行了大章显示
+对当前编辑文件进行了缩略图显示
 
 * atom-beautify
 
