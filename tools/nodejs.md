@@ -51,7 +51,7 @@ Nodejs模块中，使用exports对象暴露模块对外输出的变量和方法�
 
 ## Nodejs的Api
 
-Nodejs在标前ECMAScript5标准的基础上，又提供一套Api。这些API可以文件系统、网络和密码加解密等功能。这些Api以一堆模块的形式提供给程序员。
+Nodejs在标前ECMAScript5标准的基础上，又提供一套Api。这些API提供了文件系统、网络和密码加解密等功能。这些Api以一堆模块的形式提供给程序员。
 
 如读取一个本地文件, readfile-demo.js
 
@@ -75,7 +75,7 @@ npm是Nodejs的一个命令，用来管理下载Nodejs扩展包。这个扩展�
 
 ## 下载一个扩展库
 
-执行`npm install colors`。等待一会儿，执行完成后。会在当前目录下生成一个名为`node_modules`目录。这个目录用存放Nodejs的扩展库。Nodejs遇到require指令，扫描标装Api后，会扫描当前目录的`node_modules`里面的内容。
+执行`npm install colors`。等待一会儿，执行完成后。会在当前目录下生成一个名为`node_modules`目录。这个目录用存放Nodejs的扩展库。Nodejs遇到require指令，首先按照路径寻找，然后扫描标准Api后，最后扫描当前目录的`node_modules`里面的内容。
 
 现在`node_modules`会存在一个`colors`的模块。我们现在可以在代码中使用它。
 
@@ -104,3 +104,7 @@ npm是Nodejs的一个命令，用来管理下载Nodejs扩展包。这个扩展�
 下载完成后，我们可以使用`nrm ls`查看当前有哪些国内镜像。使用`nrm test`测试各个镜像的响应速度。
 
 我们决定使用阿里巴巴的镜像`nrm use taobao`。之后再使用`npm`命令下载东西，基本就是瞬秒了。
+
+## 查找自己想要的库
+
+可以登陆[npm官网](https://www.npmjs.com/)进行搜索。

@@ -2,7 +2,7 @@
 
 > 一言以蔽之
 >
-> webpack是Nodejs的一个扩展命令。它原始核心功肥是将多个js文件打包合并成一个js文件。webpack本身可以扩展，分为loader（加载器）和plugin（插件）。通过加载各种loader和plugin，可以编译typescript、加载html、css、图片合并成一个打包文件，然后混淆压缩打包文件。
+> webpack是Nodejs的一个扩展命令。它原始核心功是将多个js文件打包合并成一个js文件。webpack本身可以扩展，分为loader（加载器）和plugin（插件）。通过加载各种loader和plugin，可以编译typescript、加载html、css、图片合并成一个打包文件，然后混淆压缩打包文件。
 
 ## 安装webpack扩展命令
 
@@ -80,7 +80,7 @@
 
 非javscript的打包资源，需要下载webpack加载器来支持。
 
-执行`npm install html-loader style-loader css-loader less less-loader url-loader ts-loader webpack`下载这些加载器。
+执行`npm install html-loader style-loader css-loader less less-loader url-loader typescript ts-loader webpack`下载这些加载器。
 
 * html-loader html加载器，用于打包html文件。在angular中，加载页面模板有用。
 * css-loader css加载器，用于打包css文件。
@@ -88,6 +88,7 @@
 * style-loader css加载器、less加载器都依赖这个style加载器。
 * url-loader url加载器。用于处理其它资源。它负责将资源转抱[Data URI](http://baike.baidu.com/item/Data%20URI)
 * ts-loader typesrcipt加载器。用于编译打包typescript文件。稍后章节会介绍。
+* typescript typescript编译器。
 * webpack webpack包，里面包含了一些插件(plugin)。如压缩混淆。
 
 ### 一个传统页面
@@ -211,3 +212,119 @@ entry.js文件
 
         <script type="text/javascript" src="./bundle.js"></script>
     </html>
+
+### 一步一步来之一 增加Less支持
+
+在webpack.config.js的loaders数组中增加一条配置
+
+    { test: /\.less$/, loader: "style!css!less" }
+
+遇到.less文件，使用less加载器进行编译。编写test.less文件
+
+    .full-size {
+        margin: 0px;
+        padding: 0px;
+        width: 100%;
+        height: 100%;
+    }
+
+    html, body {
+        .full-size();
+    }
+
+    @text-color: red;
+    @text-size: 12px;
+
+    #main {
+        .full-size();
+
+        color: @text-color;
+        font-size: @text-size + 9;
+    }
+
+修改entry.js，将加载test.css改成加载test.less。
+
+    require("./test.less"); //加载test.less
+    require("./test.js"); //加载test.js
+
+执行`webpack`后，在浏览器查看test.html。
+
+## 一步一步来之二，添加typescript支持，并使用模板
+
+在webpack.config.js的loaders数组中增加一条配置
+
+    //对.html, .tpl使用html加载器
+    { test: /\.html$|\.tpl$/, loader: "html" },
+    //对.ts使用typescript加载器
+    { test: /\.ts$/, loader: "ts-loader" }
+
+在项目根目录`webpack.config.js`添加一个`tsconfig.json`配置文件用来配置typescript编译选项。
+
+    {
+        "compilerOptions": {
+            "target": "es5",                    //将typescript编译成es5代码
+            "sourceMap": true,                  //生成source-map
+            "emitDecoratorMetadata": true,      //保存注解数据
+            "experimentalDecorators": true,     //支持注释功能
+            "removeComments": true,             //不保存注释信息
+            "noImplicitAny": false              //不使用任何暗示信息
+        },
+        "files": [
+            "node_modules/typescript/lib/lib.es6.d.ts", //加载es6库
+            "webpack/env-webpack.ts"                    //加载自定义库
+        ],
+        "compileOnSave": false
+    }
+
+**Json不支持注释，复制粘贴时请把注释去掉**
+
+因为typescript本身没有require指令，为指示webpack加载资源。我们需要声明require指令。需要编写webpack/env-webpack.ts文件
+
+    declare function require(name: string): any;
+
+编写test.ts文件
+
+    class Template
+    {
+        private apply: Function;
+
+        constructor(private parent)
+        {
+            let content = require("./test.tpl"); //指示webpack加载指定模板
+
+            //制作模板字符串函数
+            this.apply = new Function("data", `
+                return \`${content}\`;
+            `);
+        }
+
+        public show(data): void
+        {
+            //通过模板生成页面
+            let content = this.apply(data);
+
+            //插入
+            this.parent.innerHTML = content;
+        }
+    }
+
+    window.addEventListener("load", function(event) {
+        let main = document.getElementById("main");
+
+        let template: Template = new Template(main);
+
+        template.show({
+            message: "this is message from type script"
+        });
+    });
+
+编写模板文件test.tpl
+
+    <span>${data.message}</span>
+
+修改entry.js
+
+    require("./test.css"); //加载test.css
+    require("./test.ts"); //加载test.ts
+
+然后打包并运行。
