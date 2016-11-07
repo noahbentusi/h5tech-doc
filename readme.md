@@ -16,13 +16,14 @@
 1. [NodeJs和NPM](tools/nodejs.md) Javascript运行时虚拟机与NPM海量库和工具
 1. [Webpack](tools/webpack.md) 万能的前端代码打包器
 1. [Atom](tools/atom.md) 免费的Javascript开发IDE
-1. [NativeScript](tools/nativescript.md) 将Javascript编译成Android和IOS原生App
+1. [NativeScript](tools/nativescript.md) 将Javascript编译成Android和iOS原生App
 
 ## 语言
 
 1. [Typescript](langs/typescript.md) 强类型的es6
-1. [Css3](langs/css3.md)
-1. [Less](langs/less.md)
+1. [Css3](langs/css3.md) Css3的一些功能介绍
+1. [Less](langs/less.md) 计算出来的Css
+1. [SVG](langs/svg.md) SVG，XML描述的矢量图
 
 ## 库
 
